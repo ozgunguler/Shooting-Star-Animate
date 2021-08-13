@@ -1,0 +1,82 @@
+package labwork9;
+
+import java.awt.Color;
+import java.awt.GradientPaint; import java.awt.Graphics; import java.awt.Graphics2D;
+import java.awt.event.*; 
+import java.awt.geom.*; 
+import javax.swing.JFrame; 
+import javax.swing.JPanel; 
+import javax.swing.Timer;
+
+public class Animate extends JPanel implements ActionListener {
+Timer timer;
+
+private final double points[][] = {
+{ 0, 85 }, { 75, 75 }, { 100, 10 }, { 125, 75 },
+{ 200, 85 }, { 150, 125 }, { 160, 190 }, { 100, 150 },
+{ 40, 190 }, { 50, 125 }, { 0, 85 }
+};
+
+double xPoints[]= {0, 75, 100, 125, 200, 150, 160, 100, 40, 50, 0};
+double yPoints[]= {85, 75, 10, 75, 85, 125, 190, 150, 190, 125, 85};
+
+private double scale = 1;
+private double delta = 0.01;
+
+
+public Animate() {
+
+	timer = new Timer(10, this);
+	timer.start();
+
+}
+public void paint(Graphics g) {
+	
+
+	Graphics2D g2d = (Graphics2D) g;
+	GradientPaint gradientPaint 
+    = new GradientPaint(140, 140, Color.getHSBColor( 0.75f, 0.8f, 0.3f ), 200, 200, Color.getHSBColor( 0.65f, 0.8f, 0.5f ), false);
+
+	
+	g2d.setPaint(gradientPaint); 
+	g2d.fillRect(0, 0, getWidth(), getHeight());
+	GeneralPath star = new GeneralPath();
+
+    star.moveTo(xPoints[0] , yPoints[0] );
+    for (int count = 1; count < xPoints.length; count++)
+		star.lineTo(xPoints[count], yPoints[count]);
+    
+    star.closePath();
+    
+    g2d.scale(scale, scale);
+
+    g2d.setColor(Color.YELLOW);
+    g2d.fill(star);
+
+		
+}
+public static void main(String[] args) { 
+	
+	JFrame frame = new JFrame("Shooting Star");
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	Animate animate = new Animate();
+	frame.add(animate);
+
+	frame.setBackground(Color.getHSBColor( 0.75f, 0.8f, 0.3f )); 
+	frame.setSize(400, 400); 
+	frame.setVisible(true); 
+}
+public void actionPerformed(ActionEvent e) {
+
+	if (scale < 0.01) {
+	      delta = -delta;
+	    } else if (scale > 0.99) {
+	      delta = -delta;
+	    }
+
+	    scale += delta;
+	    repaint();
+	  
+	 
+} }
